@@ -1,0 +1,22 @@
+{
+  "name": "origami",
+  "version": "1.0.0",
+  "description": "AI-driven blackbox test documentation framework with signal system for confidence visualization",
+  "author": {
+    "name": "mozuq",
+    "email": "hello@mozuq-lab.com"
+  },
+  "homepage": "https://github.com/mozuq-lab/origami-lite",
+  "repository": "https://github.com/mozuq-lab/origami-lite",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "blackbox",
+    "test-design",
+    "test-case-generation",
+    "qa",
+    "documentation",
+    "given-when-then"
+  ],
+  "commands": "./commands/"
+}

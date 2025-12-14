@@ -1,0 +1,32 @@
+{
+  "name": "origami-lite",
+  "displayName": "Origami Lite",
+  "description": "AI-driven blackbox test documentation framework with confidence-level signal system",
+  "owner": {
+    "name": "<your-name>",
+    "email": "<your-email>"
+  },
+  "plugins": [
+    {
+      "name": "origami",
+      "source": ".",
+      "description": "AI-driven blackbox test documentation framework with signal system for confidence visualization",
+      "version": "1.0.0",
+      "author": {
+        "name": "<your-name>"
+      },
+      "homepage": "https://github.com/<your-username>/origami-lite",
+      "repository": "https://github.com/<your-username>/origami-lite",
+      "license": "MIT",
+      "keywords": [
+        "testing",
+        "blackbox",
+        "test-design",
+        "test-case-generation",
+        "qa",
+        "documentation",
+        "given-when-then"
+      ]
+    }
+  ]
+}
