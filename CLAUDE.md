@@ -40,12 +40,13 @@ origami-lite/
 ### タスク分割コマンド
 
 大規模仕様書のコンテキスト肥大化を防ぐため、機能単位でタスクを分割して順次実行する。
+**出力先分離**: 各仕様書ごとに独立したディレクトリに出力を分離し、複数仕様書の管理を容易にする。
 
 | コマンド                | 入力              | 出力                          |
 | ----------------------- | ----------------- | ----------------------------- |
-| `/origami:plan-tasks`   | 仕様書            | tasks/task-list.md            |
-| `/origami:run-task`     | タスクID          | 4出力ファイルに追記           |
-| `/origami:verify-tasks` | （自動参照）      | 進捗レポート                  |
+| `/origami:plan-tasks`   | 仕様書            | {仕様書名}/tasks/task-list.md |
+| `/origami:run-task`     | タスクID          | {仕様書名}/に4出力ファイル追記 |
+| `/origami:verify-tasks` | 仕様書名          | 進捗レポート                  |
 
 ## 信号機システム
 
@@ -59,16 +60,19 @@ AI 推論の確信度を 3 段階で可視化する：
 
 ## 出力先
 
-すべての出力ファイルは `docs/origami/` ディレクトリに生成される：
+すべての出力ファイルは `docs/origami/{仕様書名}/` ディレクトリに生成される（仕様書ごとに独立）：
 
 ```
 docs/origami/
-├── 01_機能一覧.md
-├── 02_動作仕様一覧.md
-├── 03_境界値分析表.md
-├── 04_テストケース一覧.md
-└── tasks/
-    └── task-list.md          # タスク分割時に生成
+├── {仕様書名1}/              # 仕様書ごとに独立したディレクトリ
+│   ├── 01_機能一覧.md
+│   ├── 02_動作仕様一覧.md
+│   ├── 03_境界値分析表.md
+│   ├── 04_テストケース一覧.md
+│   └── tasks/
+│       └── task-list.md
+├── {仕様書名2}/
+│   └── ...
 ```
 
 ## ワークフロー
@@ -89,12 +93,12 @@ docs/origami/
 
 ```
 /origami:plan-tasks [仕様書]
-    ↓ task-list.md生成
+    ↓ docs/origami/{仕様書名}/tasks/task-list.md 生成
 /origami:run-task TASK-001
-    ↓ 4出力ファイルに追記
+    ↓ docs/origami/{仕様書名}/ に4出力ファイル追記
 /origami:run-task TASK-002
     ↓ ...
-/origami:verify-tasks
+/origami:verify-tasks [仕様書名]
     ↓ 進捗レポート表示
 ```
 

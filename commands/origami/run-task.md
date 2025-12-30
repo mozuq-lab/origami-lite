@@ -1,12 +1,12 @@
 ---
-description: 指定されたタスクを実行し、対象機能のテストドキュメントを生成します。
+description: 指定されたタスクを実行し、対象機能のテストドキュメントを仕様書別ディレクトリに生成します。
 ---
 
 # run-task
 
 ## 目的
 
-`/origami:plan-tasks` で生成されたタスク一覧から、指定されたタスクID（TASK-XXX）の機能のみを処理します。既存の4コマンド（extract-features, behavior-checklist, boundary-analysis, generate-cases）を内部的に呼び出し、結果を出力ファイルにインクリメンタルに追記します。
+`/origami:plan-tasks` で生成されたタスク一覧から、指定されたタスクID（TASK-XXX）の機能のみを処理します。既存の4コマンド（extract-features, behavior-checklist, boundary-analysis, generate-cases）を内部的に呼び出し、**task-list.mdに記録された出力先ディレクトリ**に結果をインクリメンタルに追記します。
 
 ## 事前準備
 
@@ -15,9 +15,16 @@ description: 指定されたタスクを実行し、対象機能のテストド�
    - `docs/rule/origami` ディレクトリが存在する場合は読み込み
    - 各ディレクトリ内のすべてのファイルを読み込み、追加ルールとして適用
 
-2. **タスクファイルの確認**
-   - `docs/origami/tasks/task-list.md` が存在することを確認
+2. **タスクファイルと出力先の確認** 🔵
+   - task-list.md を検索（以下の順序で検索）:
+     1. `docs/origami/*/tasks/task-list.md`（仕様書別ディレクトリ）
+     2. `docs/origami/tasks/task-list.md`（レガシー形式、後方互換）
    - 存在しない場合はエラーメッセージを表示し、`/origami:plan-tasks` の実行を案内
+   - **task-list.mdから「出力先:」行を解析し、出力先ディレクトリパスを取得** 🔵
+
+3. **出力先ディレクトリの検証** 🔵
+   - task-list.mdから取得した出力先ディレクトリの存在を確認
+   - 存在しない場合はエラーメッセージを表示し、`/origami:plan-tasks` の再実行を案内
 
 ## 入力
 
@@ -37,11 +44,22 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 ### 1. 事前チェック
 
 #### 1.1 タスク存在確認
-- `docs/origami/tasks/task-list.md` から指定されたタスクIDを検索
+- task-list.md から指定されたタスクIDを検索
 - 該当タスクが見つからない場合はエラーメッセージを表示
 - 見つかった場合は対象機能（F-XXX）を特定
 
-#### 1.2 依存タスクチェック
+#### 1.2 出力先情報の取得 🔵
+- task-list.mdの概要セクションから「出力先:」行を解析
+- 出力先ディレクトリパスを取得（例: `docs/origami/ecommerce-spec/`）
+- **出力先情報がない場合はエラー**:
+  ```
+  エラー: task-list.mdに出力先情報が見つかりません。
+
+  plan-tasksコマンドを再実行してください:
+  /origami:plan-tasks {仕様書パス}
+  ```
+
+#### 1.3 依存タスクチェック
 - タスクの「依存タスク」フィールドを確認
 - 依存タスクがある場合、そのチェックボックスの状態を確認
 - 依存タスクが未完了の場合：
@@ -57,28 +75,33 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 
 ### 2. 対象機能の処理
 
-指定されたタスクIDに対応する機能（F-XXX）を、以下の4フェーズで順次処理します：
+指定されたタスクIDに対応する機能（F-XXX）を、以下の4フェーズで順次処理します。
+**各コマンドは取得した出力先ディレクトリを `--output` 引数で受け取ります** 🔵
 
 #### 2.1 Phase 1: extract-features
-- 対象機能の情報を `01_機能一覧.md` に追記
+- 対象機能の情報を `{出力先}/01_機能一覧.md` に追記
+- コマンド: `/origami:extract-features --output {出力先} --target F-XXX`
 - 既に該当機能が存在する場合はスキップ
 
 #### 2.2 Phase 1.5: behavior-checklist
-- 対象機能のMust/Never動作仕様を `02_動作仕様一覧.md` に追記
+- 対象機能のMust/Never動作仕様を `{出力先}/02_動作仕様一覧.md` に追記
+- コマンド: `/origami:behavior-checklist --output {出力先} --target F-XXX`
 - 信号機システムを適用
 
 #### 2.3 Phase 2: boundary-analysis
-- 対象機能の境界値分析表を `03_境界値分析表.md` に追記
+- 対象機能の境界値分析表を `{出力先}/03_境界値分析表.md` に追記
+- コマンド: `/origami:boundary-analysis --output {出力先} --target F-XXX`
 - 信号機システムを適用
 
 #### 2.4 Phase 3: generate-cases
-- 対象機能のテストケースを `04_テストケース一覧.md` に追記
+- 対象機能のテストケースを `{出力先}/04_テストケース一覧.md` に追記
+- コマンド: `/origami:generate-cases --output {出力先} --target F-XXX`
 - TC-XXX-YY 形式でテストケースIDを付与
 - 信号機システムを適用
 
 ### 3. タスク完了処理
 
-- `docs/origami/tasks/task-list.md` の該当タスクのチェックボックスを更新
+- task-list.md の該当タスクのチェックボックスを更新
   ```markdown
   - [x] TASK-001 完了
   ```
@@ -110,6 +133,7 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 📋 タスク詳細:
 - タスクID: {タスクID}
 - 対象機能: F-XXX {機能名}
+- 出力先: {出力先ディレクトリ}
 - 依存タスク: {あり/なし}
 
 🔄 処理フェーズを開始します...
@@ -119,18 +143,18 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 
 ```
 ✅ Phase 1 完了: extract-features
-   → 01_機能一覧.md に追記しました
+   → {出力先}/01_機能一覧.md に追記しました
 
 ✅ Phase 1.5 完了: behavior-checklist
-   → 02_動作仕様一覧.md に追記しました
+   → {出力先}/02_動作仕様一覧.md に追記しました
    → 🟢: X件 / 🟡: X件 / 🔴: X件
 
 ✅ Phase 2 完了: boundary-analysis
-   → 03_境界値分析表.md に追記しました
+   → {出力先}/03_境界値分析表.md に追記しました
    → 🟢: X件 / 🟡: X件 / 🔴: X件
 
 ✅ Phase 3 完了: generate-cases
-   → 04_テストケース一覧.md に追記しました
+   → {出力先}/04_テストケース一覧.md に追記しました
    → テストケース数: X件
    → 🟢: X件 / 🟡: X件 / 🔴: X件
 ```
@@ -142,19 +166,20 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 
 📊 実行サマリー:
 - 対象機能: F-XXX {機能名}
+- 出力先: {出力先ディレクトリ}
 - 生成テストケース数: X件
 - 信号分布: 🟢 X件 / 🟡 X件 / 🔴 X件
 
 📁 更新されたファイル:
-- docs/origami/01_機能一覧.md
-- docs/origami/02_動作仕様一覧.md
-- docs/origami/03_境界値分析表.md
-- docs/origami/04_テストケース一覧.md
-- docs/origami/tasks/task-list.md
+- {出力先}/01_機能一覧.md
+- {出力先}/02_動作仕様一覧.md
+- {出力先}/03_境界値分析表.md
+- {出力先}/04_テストケース一覧.md
+- {出力先}/tasks/task-list.md
 
 🔜 次のステップ:
 - 次のタスクを実行: /origami:run-task {次のタスクID}
-- 進捗確認: /origami:verify-tasks
+- 進捗確認: /origami:verify-tasks {仕様書名}
 ```
 
 ## エラーハンドリング
@@ -162,24 +187,46 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 | エラーケース | メッセージ |
 |------------|----------|
 | タスクファイル未存在 | 「タスク一覧ファイルが見つかりません。先に `/origami:plan-tasks` を実行してください」 |
+| 出力先情報なし | 「task-list.mdに出力先情報が見つかりません。`/origami:plan-tasks` を再実行してください」 |
+| 出力先ディレクトリ未存在 | 「出力先ディレクトリが存在しません: {パス}。`/origami:plan-tasks` を再実行してください」 |
 | タスクID未指定 | 「タスクIDを指定してください。例: `/origami:run-task TASK-001`」 |
 | 不正なタスクID形式 | 「タスクIDの形式が不正です。TASK-XXX 形式で指定してください」 |
 | タスクが見つからない | 「タスク {タスクID} が見つかりません。有効なタスクID: TASK-001, TASK-002, ...」 |
 | 依存タスク未完了（中断時） | 「依存タスクの完了後に再実行してください」 |
 | タスク既に完了 | 「タスク {タスクID} は既に完了しています。再実行しますか？ (y/n)」 |
 
+## 出力先情報の解析方法 🔵
+
+task-list.md の概要セクションから出力先を取得する方法:
+
+```markdown
+## 概要
+
+- 生成日時: 2025-12-30 14:30
+- 入力ソース: docs/spec/ecommerce-requirements.md
+- 出力先: docs/origami/ecommerce-requirements/   ← この行を解析
+- 総タスク数: 3件
+- 完了タスク: 0件
+```
+
+**解析ルール**:
+1. 「出力先:」または「出力先：」で始まる行を検索
+2. コロン以降の文字列を取得
+3. 前後の空白を除去
+4. パスの末尾に `/` がない場合は追加
+
 ## 実行後の確認
 
 - 各出力ファイルに該当機能の内容が追記されたことを確認
-- `docs/origami/tasks/task-list.md` のチェックボックスが更新されたことを確認
+- task-list.md のチェックボックスが更新されたことを確認
 - 信号分布のサマリーを表示し、🔴項目がある場合は警告
 
 ## 関連コマンド
 
 | コマンド | 説明 |
 |---------|------|
-| `/origami:plan-tasks` | タスク分割計画を生成（run-taskの前に実行） |
-| `/origami:verify-tasks` | タスクの完了状況を確認 |
+| `/origami:plan-tasks` | タスク分割計画を生成（run-taskの前に実行、出力先情報を生成） |
+| `/origami:verify-tasks` | 指定ディレクトリのタスク完了状況を確認 |
 | `/origami:extract-features` | 機能一覧を抽出（run-task内で呼び出される） |
 | `/origami:behavior-checklist` | 動作仕様一覧を作成（run-task内で呼び出される） |
 | `/origami:boundary-analysis` | 境界値分析表を作成（run-task内で呼び出される） |

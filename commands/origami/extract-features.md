@@ -16,10 +16,25 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
    - `docs/rule/origami` ディレクトリが存在する場合は読み込み
    - 各ディレクトリ内のすべてのファイルを読み込み、追加ルールとして適用
 
-2. **出力ディレクトリの確認**
-   - `docs/origami/` ディレクトリが存在しない場合は作成
+2. **出力先ディレクトリの決定** 🔵
+   - `--output` 引数が指定されている場合はそのディレクトリを使用
+   - 指定がない場合は入力ファイル名から出力先を自動決定:
+     - 入力ファイル名から拡張子を除去してディレクトリ名を生成
+     - 出力先: `docs/origami/{仕様書名}/`
+     - 例: `ecommerce-spec.md` → `docs/origami/ecommerce-spec/`
+   - 出力ディレクトリが存在しない場合は作成
 
 ## 入力
+
+### 引数 🔵
+
+| 引数 | 説明 | 必須 | 例 |
+|------|------|------|-----|
+| 仕様書 | 入力ファイルまたはURL | ○ | `docs/requirements.md` |
+| --output | 出力先ディレクトリ | △ | `--output docs/origami/my-spec/` |
+| --target | 対象機能ID（タスク分割経由時） | △ | `--target F-001` |
+
+### 入力形式
 
 以下の形式を受け付けます：
 
@@ -28,6 +43,21 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 | Markdown | .md拡張子のファイル | `docs/requirements.md を参照して` |
 | テキスト | .txt拡張子のファイル | `spec.txt を参照して` |
 | URL | Web上のページ | `https://example.com/api-spec を分析して` |
+
+### 使用例 🔵
+
+```bash
+# 単独実行（出力先自動決定）
+/origami:extract-features docs/ecommerce-spec.md
+# → docs/origami/ecommerce-spec/01_機能一覧.md に出力
+
+# 出力先を明示的に指定
+/origami:extract-features docs/spec.md --output docs/origami/my-project/
+# → docs/origami/my-project/01_機能一覧.md に出力
+
+# タスク分割経由（run-taskから呼び出し）
+/origami:extract-features --output docs/origami/ecommerce-spec/ --target F-001
+```
 
 ## 実行内容
 
@@ -68,7 +98,10 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 
 ## 出力フォーマット
 
-出力先: `docs/origami/01_機能一覧.md`
+出力先: `{出力先ディレクトリ}/01_機能一覧.md` 🔵
+
+- `--output` 指定時: `{--output}/01_機能一覧.md`
+- 自動決定時: `docs/origami/{仕様書名}/01_機能一覧.md`
 
 ### テンプレート
 
@@ -134,7 +167,7 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 
 ## 実行後の確認
 
-- `docs/origami/01_機能一覧.md` が作成されたことを確認
+- `{出力先}/01_機能一覧.md` が作成されたことを確認
 - 以下のサマリーを表示：
 
 ```
@@ -146,13 +179,13 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 - 🔴 要確認: X件
 - 合計: X件
 
-📁 出力ファイル: docs/origami/01_機能一覧.md
+📁 出力ファイル: {出力先}/01_機能一覧.md
 
 ⚠️ 🔴項目が X件 あります。ステークホルダーに確認してください。
 
 🔜 次のステップ:
-- /origami:behavior-checklist - Must/Never動作仕様を整理
-- /origami:boundary-analysis - 境界値分析を実施
+- /origami:behavior-checklist --output {出力先} - Must/Never動作仕様を整理
+- /origami:boundary-analysis --output {出力先} - 境界値分析を実施
 ```
 
 ## エラーハンドリング
