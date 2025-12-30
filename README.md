@@ -19,7 +19,7 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 ## インストール
 
 ```bash
-/install <your-username>/origami-lite
+/plugin install mozuq-lab/origami-lite
 ```
 
 ## コマンド一覧
