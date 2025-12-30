@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "origami",
+      "name": "origami-lite",
       "source": "./",
       "description": "AI-driven blackbox test documentation framework with signal system for confidence visualization",
       "version": "1.0.0",
