@@ -5,39 +5,6 @@ All notable changes to Origami Lite will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-12-14
-
-### Added
-
-- Initial release of Origami Lite Plugin
-- **4 Commands**:
-  - `/origami:extract-features` - Extract features from specifications
-  - `/origami:generate-checklist` - Generate Must/Never behavior specifications
-  - `/origami:analyze-boundaries` - Analyze boundary values
-  - `/origami:generate-cases` - Generate test cases in Given/When/Then format
-- **Signal System** (Traffic Light):
-  - 🟢 Green: High confidence (explicitly stated in specification)
-  - 🟡 Yellow: Medium confidence (derived from industry standards/best practices)
-  - 🔴 Red: Requires confirmation (speculation)
-- **Flexible Input Support**:
-  - Markdown files (.md)
-  - Text files (.txt)
-  - URLs
-- **Workflow Support**:
-  - Recommended workflow (Phase 1 → Phase 1.5 → Phase 2 → Phase 3)
-  - Standalone execution for each command
-- **Output Formats**:
-  - Feature list with signal indicators
-  - Must/Never behavior checklist
-  - Boundary value analysis table
-  - Test cases in Given/When/Then format with priority levels
-
-### Documentation
-
-- README.md with installation and usage instructions
-- MIT License
-- Command specifications with detailed templates
-
 ## [Unreleased]
 
 ### Planned
@@ -45,6 +12,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - URL fetch support improvements
 - Additional test case formats
 - Integration with test management tools
+
+## [3.0.0] - 2025-12-31
+
+### Added
+
+- **Feature-based Directory Output**: Task split execution now outputs to feature-specific directories
+  - Output path: `{spec-name}/F-XXX_{feature-name}/`
+  - Each feature gets its own directory with 4 files
+  - Prevents context bloat by isolating feature data
+
+- **Input File Restriction**: Task split commands now only read from their own feature directory
+  - `generate-checklist`: reads `01_機能詳細.md` only
+  - `analyze-boundaries`: reads `02_動作仕様.md` only
+  - `generate-cases`: reads `01_機能詳細.md`, `02_動作仕様.md`, `03_境界値分析.md`
+  - Prevents cross-feature context pollution
+
+- **Conditional Output Filenames**: Output filename changes based on execution context
+  - Standalone: `01_機能一覧.md`, `02_動作仕様一覧.md`, etc.
+  - Task split: `01_機能詳細.md`, `02_動作仕様.md`, etc.
+
+### Changed
+
+- `split-spec`: Now extracts feature logical names for directory naming
+- `run-task`: Creates `F-XXX_{feature-name}/` directory before executing commands
+- `verify-tasks`: Now verifies feature directory structure
+- All 4 base commands: Added `--target` option support for single-feature execution
+
+### Documentation
+
+- Updated CLAUDE.md with feature directory structure
+- Updated README.md with new workflow examples
 
 ## [2.0.0] - 2025-12-31
 
@@ -117,3 +115,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added task splitting workflow to README.md
 - Added task splitting commands to CLAUDE.md
+
+## [1.0.0] - 2025-12-14
+
+### Added
+
+- Initial release of Origami Lite Plugin
+- **4 Commands**:
+  - `/origami:extract-features` - Extract features from specifications
+  - `/origami:generate-checklist` - Generate Must/Never behavior specifications
+  - `/origami:analyze-boundaries` - Analyze boundary values
+  - `/origami:generate-cases` - Generate test cases in Given/When/Then format
+- **Signal System** (Traffic Light):
+  - 🟢 Green: High confidence (explicitly stated in specification)
+  - 🟡 Yellow: Medium confidence (derived from industry standards/best practices)
+  - 🔴 Red: Requires confirmation (speculation)
+- **Flexible Input Support**:
+  - Markdown files (.md)
+  - Text files (.txt)
+  - URLs
+- **Workflow Support**:
+  - Recommended workflow (Phase 1 → Phase 1.5 → Phase 2 → Phase 3)
+  - Standalone execution for each command
+- **Output Formats**:
+  - Feature list with signal indicators
+  - Must/Never behavior checklist
+  - Boundary value analysis table
+  - Test cases in Given/When/Then format with priority levels
+
+### Documentation
+
+- README.md with installation and usage instructions
+- MIT License
+- Command specifications with detailed templates
