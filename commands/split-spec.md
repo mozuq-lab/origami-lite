@@ -146,7 +146,9 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 
 出力先: `docs/origami/{仕様書名}/tasks/task-list.md`
 
-### テンプレート
+### テンプレート 🔵
+
+**信頼性**: 🔵 *PRD「task-list.md フォーマット変更」より*
 
 ```markdown
 # Origami タスク一覧
@@ -157,41 +159,64 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 - 入力ソース: {ファイル名/URL}
 - 出力先: docs/origami/{仕様書名}/
 - 総タスク数: X件
-- 完了タスク: 0件
+- 完了フェーズ: 0 / {X × 4} フェーズ
+
+---
+
+## ステータス凡例
+
+| 記号 | 意味 |
+|------|------|
+| ⏳ | 未着手 |
+| 🔄 | 実行中 |
+| ✅ | 完了 |
+| ⚠️ | 要確認（🔴項目あり） |
 
 ---
 
 ## タスク一覧
 
-### TASK-001: F-001 {機能名}
+## TASK-001: F-001 {機能名}
+
+**出力先**: docs/origami/{仕様書名}/F-001_{機能名}/
 
 | 項目 | 内容 |
 |------|------|
 | タスクID | TASK-001 |
 | 機能ID | F-001 |
 | 機能名 | {機能名} |
-| 出力先 | docs/origami/{仕様書名}/F-001_{機能名}/ |
-| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
-| 状態 | 未完了 |
 
-- [ ] TASK-001 完了
+### フェーズ進捗
+
+| Phase | Status | Output |
+|-------|--------|--------|
+| 1 | ⏳ | - |
+| 2 | ⏳ | - |
+| 3 | ⏳ | - |
+| 4 | ⏳ | - |
 
 ---
 
-### TASK-002: F-002 {機能名}
+## TASK-002: F-002 {機能名}
+
+**出力先**: docs/origami/{仕様書名}/F-002_{機能名}/
 
 | 項目 | 内容 |
 |------|------|
 | タスクID | TASK-002 |
 | 機能ID | F-002 |
 | 機能名 | {機能名} |
-| 出力先 | docs/origami/{仕様書名}/F-002_{機能名}/ |
-| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | TASK-001（{依存理由がある場合}） |
-| 状態 | 未完了 |
 
-- [ ] TASK-002 完了
+### フェーズ進捗
+
+| Phase | Status | Output |
+|-------|--------|--------|
+| 1 | ⏳ | - |
+| 2 | ⏳ | - |
+| 3 | ⏳ | - |
+| 4 | ⏳ | - |
 
 ---
 
@@ -212,13 +237,28 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 ## 次のステップ
 
 各タスクを順次実行するには:
-1. `/origami:run-task TASK-001` を実行
-   → `docs/origami/{仕様書名}/F-001_{機能名}/` に出力ファイルを生成
-2. 完了後、次のタスクを実行
-3. 全タスク完了後、`/origami:verify-tasks {仕様書名}` で進捗確認
+
+### フェーズ別実行（推奨）
+
+1. `/origami:run-task TASK-001 --phase 1` を実行
+2. 出力ファイルをレビュー・必要に応じて修正
+3. `/origami:run-task TASK-001 --phase 2` を実行
+4. 以下、Phase 4 まで繰り返し
+
+### 一括実行
+
+1. `/origami:run-task TASK-001` を実行（全フェーズ順次実行）
+2. 各フェーズ完了後に確認プロンプトが表示されます
+3. 完了後、次のタスクを実行
+
+### 進捗確認
+
+- `/origami:verify-tasks {仕様書名}` でフェーズ単位の進捗を確認
 ```
 
-## 出力例
+## 出力例 🔵
+
+**信頼性**: 🔵 *PRD「task-list.md フォーマット変更」より*
 
 ```markdown
 # Origami タスク一覧
@@ -229,57 +269,86 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 - 入力ソース: docs/spec/ecommerce-requirements.md
 - 出力先: docs/origami/ecommerce-requirements/
 - 総タスク数: 3件
-- 完了タスク: 0件
+- 完了フェーズ: 0 / 12 フェーズ
+
+---
+
+## ステータス凡例
+
+| 記号 | 意味 |
+|------|------|
+| ⏳ | 未着手 |
+| 🔄 | 実行中 |
+| ✅ | 完了 |
+| ⚠️ | 要確認（🔴項目あり） |
 
 ---
 
 ## タスク一覧
 
-### TASK-001: F-001 ユーザー登録
+## TASK-001: F-001 ユーザー登録
+
+**出力先**: docs/origami/ecommerce-requirements/F-001_ユーザー登録/
 
 | 項目 | 内容 |
 |------|------|
 | タスクID | TASK-001 |
 | 機能ID | F-001 |
 | 機能名 | ユーザー登録 |
-| 出力先 | docs/origami/ecommerce-requirements/F-001_ユーザー登録/ |
-| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
-| 状態 | 未完了 |
 
-- [ ] TASK-001 完了
+### フェーズ進捗
+
+| Phase | Status | Output |
+|-------|--------|--------|
+| 1 | ⏳ | - |
+| 2 | ⏳ | - |
+| 3 | ⏳ | - |
+| 4 | ⏳ | - |
 
 ---
 
-### TASK-002: F-002 ログイン
+## TASK-002: F-002 ログイン
+
+**出力先**: docs/origami/ecommerce-requirements/F-002_ログイン/
 
 | 項目 | 内容 |
 |------|------|
 | タスクID | TASK-002 |
 | 機能ID | F-002 |
 | 機能名 | ログイン |
-| 出力先 | docs/origami/ecommerce-requirements/F-002_ログイン/ |
-| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | TASK-001（ユーザー登録後にログイン可能） |
-| 状態 | 未完了 |
 
-- [ ] TASK-002 完了
+### フェーズ進捗
+
+| Phase | Status | Output |
+|-------|--------|--------|
+| 1 | ⏳ | - |
+| 2 | ⏳ | - |
+| 3 | ⏳ | - |
+| 4 | ⏳ | - |
 
 ---
 
-### TASK-003: F-003 商品検索
+## TASK-003: F-003 商品検索
+
+**出力先**: docs/origami/ecommerce-requirements/F-003_商品検索/
 
 | 項目 | 内容 |
 |------|------|
 | タスクID | TASK-003 |
 | 機能ID | F-003 |
 | 機能名 | 商品検索 |
-| 出力先 | docs/origami/ecommerce-requirements/F-003_商品検索/ |
-| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
-| 状態 | 未完了 |
 
-- [ ] TASK-003 完了
+### フェーズ進捗
+
+| Phase | Status | Output |
+|-------|--------|--------|
+| 1 | ⏳ | - |
+| 2 | ⏳ | - |
+| 3 | ⏳ | - |
+| 4 | ⏳ | - |
 
 ---
 
@@ -296,10 +365,23 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 ## 次のステップ
 
 各タスクを順次実行するには:
-1. `/origami:run-task TASK-001` を実行
-   → `docs/origami/ecommerce-requirements/F-001_ユーザー登録/` に出力ファイルを生成
-2. 完了後、次のタスクを実行
-3. 全タスク完了後、`/origami:verify-tasks ecommerce-requirements` で進捗確認
+
+### フェーズ別実行（推奨）
+
+1. `/origami:run-task TASK-001 --phase 1` を実行
+2. 出力ファイルをレビュー・必要に応じて修正
+3. `/origami:run-task TASK-001 --phase 2` を実行
+4. 以下、Phase 4 まで繰り返し
+
+### 一括実行
+
+1. `/origami:run-task TASK-001` を実行（全フェーズ順次実行）
+2. 各フェーズ完了後に確認プロンプトが表示されます
+3. 完了後、次のタスクを実行
+
+### 進捗確認
+
+- `/origami:verify-tasks ecommerce-requirements` でフェーズ単位の進捗を確認
 ```
 
 ## エラーハンドリング
@@ -315,26 +397,30 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 
 - `docs/origami/{仕様書名}/tasks/task-list.md` が作成されたことを確認
 - 出力先ディレクトリ構造が正しく作成されたことを確認:
-  ```
+
+  ```text
   docs/origami/{仕様書名}/
   └── tasks/
       └── task-list.md
   ```
+
 - task-list.md の各タスクに以下のフィールドが含まれることを確認:
   - 機能ID（F-XXX形式）
   - 機能名（日本語論理名）
   - 出力先（`docs/origami/{仕様書名}/F-XXX_{機能名}/` 形式）
+  - **フェーズ進捗テーブル**（Phase 1-4、初期状態は全て ⏳）🔵
+- **ステータス凡例セクションが含まれることを確認** 🔵
 - 生成されたタスク数を表示
 - 信号別の件数サマリーを表示
-- 次のステップ（run-task）を案内
-  - 各タスクの出力先ディレクトリパスを案内に含める
+- 次のステップ（run-task --phase）を案内
+  - フェーズ別実行と一括実行の両方を案内
 
 ## 関連コマンド
 
 | コマンド | 説明 |
 |---------|------|
-| `/origami:run-task` | 生成されたタスクを個別に実行（task-list.mdの出力先に機能ディレクトリを作成） |
-| `/origami:verify-tasks` | 機能ディレクトリ構造を確認し、タスク完了状況を集計 |
+| `/origami:run-task` | 生成されたタスクを個別に実行（`--phase` オプションでフェーズ別実行可能） |
+| `/origami:verify-tasks` | フェーズ単位の進捗を確認し、タスク完了状況を集計 |
 | `/origami:extract-features` | 機能一覧を抽出（split-spec内で呼び出される） |
 
 ## 機能別ディレクトリ方式について
@@ -372,3 +458,12 @@ docs/origami/{仕様書名}/
 
 - 既存の追記方式（`01_機能一覧.md` など）との互換性はありません
 - 単独実行時のデフォルト動作は変更なし（後方互換）
+
+### Breaking Change（v3.1.0）🔵
+
+**信頼性**: 🔵 *PRD「Breaking Changes」より*
+
+- task-list.md のフォーマット変更（フェーズ単位進捗管理形式）
+- 各タスクにフェーズ進捗テーブルを追加
+- ステータス凡例セクションを追加
+- 「次のステップ」セクションにフェーズ別実行の案内を追加

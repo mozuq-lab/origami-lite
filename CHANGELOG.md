@@ -13,6 +13,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional test case formats
 - Integration with test management tools
 
+## [3.1.0] - 2025-12-31
+
+### Added
+
+- **Phase-based Execution**: New `--phase` option for `run-task` command
+  - `--phase 1`: Execute extract-features only
+  - `--phase 2`: Execute generate-checklist only
+  - `--phase 3`: Execute analyze-boundaries only
+  - `--phase 4`: Execute generate-cases only
+  - Omitting `--phase` executes all phases sequentially (backward compatible)
+
+- **Phase Progress Tracking**: `verify-tasks` now displays phase-level progress
+  - Progress calculation: `completed phases / (tasks × 4)`
+  - Phase status indicators: ⏳ pending, 🔄 in progress, ✅ completed, ⚠️ needs review
+  - Next action suggestions based on current progress
+
+- **Inter-phase Input Restriction**: Each phase only reads the previous phase's output
+  - Phase 1 (extract-features): Reads specification (target feature section only)
+  - Phase 2 (generate-checklist): Reads `01_機能詳細.md` only
+  - Phase 3 (analyze-boundaries): Reads `02_動作仕様.md` only
+  - Phase 4 (generate-cases): Reads `01` + `02` + `03` (3 files)
+  - Maintains consistent context size regardless of specification size
+
+### Changed
+
+- **task-list.md Format**: New format with phase progress table per task
+  - Each task section includes phase status table
+  - Status symbols: ⏳ (pending), 🔄 (in progress), ✅ (completed), ⚠️ (needs review)
+  - Output file path recorded per phase
+
+- **verify-tasks Output**: Phase-based progress report
+  - Phase progress table showing all tasks × phases
+  - Overall progress percentage based on completed phases
+  - Next action recommendations
+
+### Breaking Changes
+
+- task-list.md format changed (incompatible with v3.0.x format)
+- verify-tasks output format changed
+
+### Documentation
+
+- Added v3.1.0 Breaking Change sections to all command files
+- Updated input restriction documentation for all base commands
+
 ## [3.0.0] - 2025-12-31
 
 ### Added

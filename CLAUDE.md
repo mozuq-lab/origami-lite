@@ -45,8 +45,19 @@ origami-lite/
 | コマンド                | 入力              | 出力                                    |
 | ----------------------- | ----------------- | --------------------------------------- |
 | `/origami:split-spec`   | 仕様書            | {仕様書名}/tasks/task-list.md           |
-| `/origami:run-task`     | タスクID          | {仕様書名}/F-XXX_{機能名}/ に4ファイル  |
-| `/origami:verify-tasks` | 仕様書名          | 進捗レポート                            |
+| `/origami:run-task`     | タスクID [--phase N] | {仕様書名}/F-XXX_{機能名}/ に4ファイル  |
+| `/origami:verify-tasks` | 仕様書名          | フェーズ単位進捗レポート                |
+
+### フェーズ間入力制限（v3.1.0）
+
+各フェーズは前フェーズの出力のみを参照し、コンテキストサイズを一定に保つ：
+
+| フェーズ | コマンド | 入力 | 出力 |
+|---------|---------|------|------|
+| Phase 1 | extract-features | 仕様書（対象機能部分） | `01_機能詳細.md` |
+| Phase 2 | generate-checklist | `01_機能詳細.md` のみ | `02_動作仕様.md` |
+| Phase 3 | analyze-boundaries | `02_動作仕様.md` のみ | `03_境界値分析.md` |
+| Phase 4 | generate-cases | `01` + `02` + `03` | `04_テストケース.md` |
 
 ## 信号機システム
 
@@ -116,7 +127,17 @@ docs/origami/{仕様書名}/
 /origami:run-task TASK-002
     ↓ docs/origami/{仕様書名}/F-002_{機能名}/ に4ファイル生成
 /origami:verify-tasks [仕様書名]
-    ↓ 進捗レポート表示
+    ↓ フェーズ単位進捗レポート表示
+```
+
+### フェーズ単位実行（v3.1.0〜）
+
+```
+/origami:run-task TASK-001 --phase 1  # Phase 1 のみ
+/origami:run-task TASK-001 --phase 2  # Phase 2 のみ
+/origami:run-task TASK-001 --phase 3  # Phase 3 のみ
+/origami:run-task TASK-001 --phase 4  # Phase 4 のみ
+/origami:run-task TASK-001            # 全フェーズ（後方互換）
 ```
 
 ### 単独実行
