@@ -2,7 +2,7 @@
 description: 仕様書から機能を抽出し、機能単位でタスクに分割してタスクファイルを生成します。出力は仕様書別ディレクトリに分離されます。
 ---
 
-# plan-tasks
+# split-spec
 
 ## 目的
 
@@ -36,9 +36,9 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 
 | 形式 | 説明 | 例 |
 |------|------|-----|
-| Markdown | .md拡張子のファイル | `/origami:plan-tasks docs/requirements.md` |
-| テキスト | .txt拡張子のファイル | `/origami:plan-tasks spec.txt` |
-| URL | Web上のページ | `/origami:plan-tasks https://example.com/api-spec` |
+| Markdown | .md拡張子のファイル | `/origami:split-spec docs/requirements.md` |
+| テキスト | .txt拡張子のファイル | `/origami:split-spec spec.txt` |
+| URL | Web上のページ | `/origami:split-spec https://example.com/api-spec` |
 
 ### 出力先の決定ルール
 
@@ -160,7 +160,7 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |------|------|
 | タスクID | TASK-001 |
 | 対象機能 | F-001 {機能名} |
-| 処理フェーズ | extract-features → behavior-checklist → boundary-analysis → generate-cases |
+| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
 | 状態 | 未完了 |
 
@@ -174,7 +174,7 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |------|------|
 | タスクID | TASK-002 |
 | 対象機能 | F-002 {機能名} |
-| 処理フェーズ | extract-features → behavior-checklist → boundary-analysis → generate-cases |
+| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | TASK-001（{依存理由がある場合}） |
 | 状態 | 未完了 |
 
@@ -227,7 +227,7 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |------|------|
 | タスクID | TASK-001 |
 | 対象機能 | F-001 ユーザー登録 |
-| 処理フェーズ | extract-features → behavior-checklist → boundary-analysis → generate-cases |
+| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
 | 状態 | 未完了 |
 
@@ -241,7 +241,7 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |------|------|
 | タスクID | TASK-002 |
 | 対象機能 | F-002 ログイン |
-| 処理フェーズ | extract-features → behavior-checklist → boundary-analysis → generate-cases |
+| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | TASK-001（ユーザー登録後にログイン可能） |
 | 状態 | 未完了 |
 
@@ -255,7 +255,7 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |------|------|
 | タスクID | TASK-003 |
 | 対象機能 | F-003 商品検索 |
-| 処理フェーズ | extract-features → behavior-checklist → boundary-analysis → generate-cases |
+| 処理フェーズ | extract-features → generate-checklist → analyze-boundaries → generate-cases |
 | 依存タスク | なし |
 | 状態 | 未完了 |
 
@@ -309,4 +309,4 @@ description: 仕様書から機能を抽出し、機能単位でタスクに分�
 |---------|------|
 | `/origami:run-task` | 生成されたタスクを個別に実行（task-list.mdから出力先を参照） |
 | `/origami:verify-tasks` | 指定ディレクトリのタスク完了状況を確認 |
-| `/origami:extract-features` | 機能一覧を抽出（plan-tasks内で呼び出される） |
+| `/origami:extract-features` | 機能一覧を抽出（split-spec内で呼び出される） |

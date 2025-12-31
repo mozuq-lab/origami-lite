@@ -12,10 +12,10 @@ Origami Lite は、AI 駆動ブラックボックステストドキュメント�
 origami-lite/
 ├── commands/origami/         # コマンドファイル
 │   ├── extract-features.md   # Phase 1: 機能抽出
-│   ├── behavior-checklist.md # Phase 1.5: 動作仕様整理
-│   ├── boundary-analysis.md  # Phase 2: 境界値分析
+│   ├── generate-checklist.md # Phase 1.5: 動作仕様整理
+│   ├── analyze-boundaries.md # Phase 2: 境界値分析
 │   ├── generate-cases.md     # Phase 3: テストケース生成
-│   ├── plan-tasks.md         # タスク分割: 計画生成
+│   ├── split-spec.md         # タスク分割: 計画生成
 │   ├── run-task.md           # タスク分割: タスク実行
 │   └── verify-tasks.md       # タスク分割: 進捗確認
 ├── .claude-plugin/           # プラグイン設定
@@ -33,8 +33,8 @@ origami-lite/
 | コマンド                      | フェーズ  | 入力           | 出力                    |
 | ----------------------------- | --------- | -------------- | ----------------------- |
 | `/origami:extract-features`   | Phase 1   | 仕様書         | 01\_機能一覧.md         |
-| `/origami:behavior-checklist` | Phase 1.5 | 機能一覧       | 02\_動作仕様一覧.md     |
-| `/origami:boundary-analysis`  | Phase 2   | 動作仕様一覧   | 03\_境界値分析表.md     |
+| `/origami:generate-checklist` | Phase 1.5 | 機能一覧       | 02\_動作仕様一覧.md     |
+| `/origami:analyze-boundaries` | Phase 2   | 動作仕様一覧   | 03\_境界値分析表.md     |
 | `/origami:generate-cases`     | Phase 3   | 全ドキュメント | 04\_テストケース一覧.md |
 
 ### タスク分割コマンド
@@ -44,7 +44,7 @@ origami-lite/
 
 | コマンド                | 入力              | 出力                          |
 | ----------------------- | ----------------- | ----------------------------- |
-| `/origami:plan-tasks`   | 仕様書            | {仕様書名}/tasks/task-list.md |
+| `/origami:split-spec`   | 仕様書            | {仕様書名}/tasks/task-list.md |
 | `/origami:run-task`     | タスクID          | {仕様書名}/に4出力ファイル追記 |
 | `/origami:verify-tasks` | 仕様書名          | 進捗レポート                  |
 
@@ -82,9 +82,9 @@ docs/origami/
 ```
 /origami:extract-features [仕様書]
     ↓
-/origami:behavior-checklist
+/origami:generate-checklist
     ↓
-/origami:boundary-analysis
+/origami:analyze-boundaries
     ↓
 /origami:generate-cases
 ```
@@ -92,7 +92,7 @@ docs/origami/
 ### タスク分割フロー（大規模仕様書向け）
 
 ```
-/origami:plan-tasks [仕様書]
+/origami:split-spec [仕様書]
     ↓ docs/origami/{仕様書名}/tasks/task-list.md 生成
 /origami:run-task TASK-001
     ↓ docs/origami/{仕様書名}/ に4出力ファイル追記

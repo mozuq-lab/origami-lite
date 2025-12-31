@@ -161,8 +161,8 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 ## 次のステップ
 
 1. 🔴項目についてステークホルダーに確認
-2. 確認結果を反映後、`/origami:behavior-checklist` で動作仕様一覧を作成
-3. または `/origami:boundary-analysis` で境界値分析を実施
+2. 確認結果を反映後、`/origami:generate-checklist` で動作仕様一覧を作成
+3. または `/origami:analyze-boundaries` で境界値分析を実施
 ```
 
 ## 実行後の確認
@@ -184,8 +184,8 @@ description: 仕様書・URLから機能一覧を抽出し、テスト対象を�
 ⚠️ 🔴項目が X件 あります。ステークホルダーに確認してください。
 
 🔜 次のステップ:
-- /origami:behavior-checklist --output {出力先} - Must/Never動作仕様を整理
-- /origami:boundary-analysis --output {出力先} - 境界値分析を実施
+- /origami:generate-checklist --output {出力先} - Must/Never動作仕様を整理
+- /origami:analyze-boundaries --output {出力先} - 境界値分析を実施
 ```
 
 ## エラーハンドリング

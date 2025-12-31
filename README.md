@@ -33,8 +33,8 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 | コマンド                      | 説明                      | 出力ファイル            |
 | ----------------------------- | ------------------------- | ----------------------- |
 | `/origami:extract-features`   | 仕様書から機能一覧を抽出  | 01\_機能一覧.md         |
-| `/origami:behavior-checklist` | Must/Never 動作仕様を整理 | 02\_動作仕様一覧.md     |
-| `/origami:boundary-analysis`  | 境界値分析表を作成        | 03\_境界値分析表.md     |
+| `/origami:generate-checklist` | Must/Never 動作仕様を整理 | 02\_動作仕様一覧.md     |
+| `/origami:analyze-boundaries` | 境界値分析表を作成        | 03\_境界値分析表.md     |
 | `/origami:generate-cases`     | テストケース一覧を生成    | 04\_テストケース一覧.md |
 
 ### タスク分割コマンド
@@ -44,7 +44,7 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 
 | コマンド                | 説明                                   | 出力                          |
 | ----------------------- | -------------------------------------- | ----------------------------- |
-| `/origami:plan-tasks`   | 仕様書から機能を抽出しタスク一覧を生成 | {仕様書名}/tasks/task-list.md |
+| `/origami:split-spec`   | 仕様書から機能を抽出しタスク一覧を生成 | {仕様書名}/tasks/task-list.md |
 | `/origami:run-task`     | 指定タスクを実行（4コマンド順次呼出）  | {仕様書名}/に4出力ファイル追記 |
 | `/origami:verify-tasks` | 指定仕様書のタスク完了状況を表示       | 進捗レポート                  |
 
@@ -57,10 +57,10 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 /origami:extract-features docs/spec.md
 
 # Step 2: Must/Never動作仕様を整理
-/origami:behavior-checklist
+/origami:generate-checklist
 
 # Step 3: 境界値を分析
-/origami:boundary-analysis
+/origami:analyze-boundaries
 
 # Step 4: テストケースを生成
 /origami:generate-cases
@@ -71,7 +71,7 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 ```
 # Step 1: 仕様書からタスク一覧を生成
 # → docs/origami/large-spec/tasks/task-list.md が生成される
-/origami:plan-tasks docs/large-spec.md
+/origami:split-spec docs/large-spec.md
 
 # Step 2: 各タスクを順次実行
 # → docs/origami/large-spec/ に出力ファイルが追記される

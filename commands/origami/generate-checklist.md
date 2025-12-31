@@ -2,7 +2,7 @@
 description: 機能ごとにMust（できなければならない）とNever（できてはいけない）を整理し、テスト観点を明確化します。
 ---
 
-# behavior-checklist
+# generate-checklist
 
 ## 目的
 
@@ -52,15 +52,15 @@ description: 機能ごとにMust（できなければならない）とNever（�
 
 ```bash
 # 単独実行（出力先自動決定）
-/origami:behavior-checklist docs/ecommerce-spec.md
+/origami:generate-checklist docs/ecommerce-spec.md
 # → docs/origami/ecommerce-spec/02_動作仕様一覧.md に出力
 
 # 出力先を明示的に指定
-/origami:behavior-checklist --output docs/origami/my-project/
+/origami:generate-checklist --output docs/origami/my-project/
 # → docs/origami/my-project/01_機能一覧.md を読み込み、02_動作仕様一覧.md に出力
 
 # タスク分割経由（run-taskから呼び出し）
-/origami:behavior-checklist --output docs/origami/ecommerce-spec/ --target F-001
+/origami:generate-checklist --output docs/origami/ecommerce-spec/ --target F-001
 ```
 
 ## 実行内容
@@ -187,7 +187,7 @@ description: 機能ごとにMust（できなければならない）とNever（�
 ## 次のステップ
 
 1. 🔴項目についてステークホルダーに確認
-2. 確認結果を反映後、`/origami:boundary-analysis` で境界値分析を実施
+2. 確認結果を反映後、`/origami:analyze-boundaries` で境界値分析を実施
 3. または `/origami:generate-cases` でテストケースを生成
 ```
 
@@ -213,7 +213,7 @@ description: 機能ごとにMust（できなければならない）とNever（�
 ⚠️ 🔴項目が X件 あります。ステークホルダーに確認してください。
 
 🔜 次のステップ:
-- /origami:boundary-analysis --output {出力先} - 境界値分析を実施
+- /origami:analyze-boundaries --output {出力先} - 境界値分析を実施
 - /origami:generate-cases --output {出力先} - テストケースを生成
 ```
 

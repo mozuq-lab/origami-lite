@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release of Origami Lite Plugin
 - **4 Commands**:
   - `/origami:extract-features` - Extract features from specifications
-  - `/origami:behavior-checklist` - Generate Must/Never behavior specifications
-  - `/origami:boundary-analysis` - Analyze boundary values
+  - `/origami:generate-checklist` - Generate Must/Never behavior specifications
+  - `/origami:analyze-boundaries` - Analyze boundary values
   - `/origami:generate-cases` - Generate test cases in Given/When/Then format
 - **Signal System** (Traffic Light):
   - 🟢 Green: High confidence (explicitly stated in specification)
@@ -45,7 +45,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - URL fetch support improvements
 - Additional test case formats
 - Integration with test management tools
-- Command naming improvements (see docs/design/command-naming-proposal.md)
+
+## [2.0.0] - 2025-12-31
+
+### Breaking Changes
+
+- **Command Naming Convention**: Commands renamed to follow "verb-noun" format
+  - `/origami:behavior-checklist` → `/origami:generate-checklist`
+  - `/origami:boundary-analysis` → `/origami:analyze-boundaries`
+  - `/origami:plan-tasks` → `/origami:split-spec`
+
+### Changed
+
+- Command files renamed to match new naming convention:
+  - `behavior-checklist.md` → `generate-checklist.md`
+  - `boundary-analysis.md` → `analyze-boundaries.md`
+  - `plan-tasks.md` → `split-spec.md`
+- Internal references updated in `run-task.md` and `verify-tasks.md`
+- Documentation updated (CLAUDE.md, README.md)
 
 ## [1.2.0] - 2025-12-31
 
@@ -56,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents output mixing when processing multiple specifications
   - Easier progress tracking per specification
 
-- **Directory Overwrite Confirmation**: `plan-tasks` now shows confirmation prompt when output directory exists
+- **Directory Overwrite Confirmation**: `split-spec` now shows confirmation prompt when output directory exists
   - Options: "Overwrite" or "Cancel"
   - Uses AskUserQuestion for user interaction
 
@@ -66,7 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `plan-tasks`: Records output directory in task-list.md (`出力先:` field)
+- `split-spec`: Records output directory in task-list.md (`出力先:` field)
 - `run-task`: Dynamically reads output directory from task-list.md
 - `verify-tasks`: Now requires specification name or directory path as argument
   - Example: `/origami:verify-tasks ecommerce-spec`
@@ -82,7 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Task Splitting Commands**: New commands to handle large specifications by splitting into smaller tasks
-  - `/origami:plan-tasks` - Extract features and generate task list
+  - `/origami:split-spec` - Extract features and generate task list
   - `/origami:run-task` - Execute specified task (calls 4 base commands sequentially)
   - `/origami:verify-tasks` - Display task completion status and progress report
 

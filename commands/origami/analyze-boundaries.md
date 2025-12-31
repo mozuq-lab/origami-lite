@@ -2,7 +2,7 @@
 description: 入力パラメータの境界値を特定し、境界値テストの観点を整理します。
 ---
 
-# boundary-analysis
+# analyze-boundaries
 
 ## 目的
 
@@ -54,15 +54,15 @@ description: 入力パラメータの境界値を特定し、境界値テスト�
 
 ```bash
 # 単独実行（出力先自動決定）
-/origami:boundary-analysis docs/ecommerce-spec.md
+/origami:analyze-boundaries docs/ecommerce-spec.md
 # → docs/origami/ecommerce-spec/03_境界値分析表.md に出力
 
 # 出力先を明示的に指定
-/origami:boundary-analysis --output docs/origami/my-project/
+/origami:analyze-boundaries --output docs/origami/my-project/
 # → docs/origami/my-project/ の前工程出力を読み込み、03_境界値分析表.md に出力
 
 # タスク分割経由（run-taskから呼び出し）
-/origami:boundary-analysis --output docs/origami/ecommerce-spec/ --target F-001
+/origami:analyze-boundaries --output docs/origami/ecommerce-spec/ --target F-001
 ```
 
 ## 実行内容

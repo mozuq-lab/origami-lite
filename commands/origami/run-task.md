@@ -6,7 +6,7 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 
 ## 目的
 
-`/origami:plan-tasks` で生成されたタスク一覧から、指定されたタスクID（TASK-XXX）の機能のみを処理します。既存の4コマンド（extract-features, behavior-checklist, boundary-analysis, generate-cases）を内部的に呼び出し、**task-list.mdに記録された出力先ディレクトリ**に結果をインクリメンタルに追記します。
+`/origami:split-spec` で生成されたタスク一覧から、指定されたタスクID（TASK-XXX）の機能のみを処理します。既存の4コマンド（extract-features, generate-checklist, analyze-boundaries, generate-cases）を内部的に呼び出し、**task-list.mdに記録された出力先ディレクトリ**に結果をインクリメンタルに追記します。
 
 ## 事前準備
 
@@ -19,12 +19,12 @@ description: 指定されたタスクを実行し、対象機能のテストド�
    - task-list.md を検索（以下の順序で検索）:
      1. `docs/origami/*/tasks/task-list.md`（仕様書別ディレクトリ）
      2. `docs/origami/tasks/task-list.md`（レガシー形式、後方互換）
-   - 存在しない場合はエラーメッセージを表示し、`/origami:plan-tasks` の実行を案内
+   - 存在しない場合はエラーメッセージを表示し、`/origami:split-spec` の実行を案内
    - **task-list.mdから「出力先:」行を解析し、出力先ディレクトリパスを取得** 🔵
 
 3. **出力先ディレクトリの検証** 🔵
    - task-list.mdから取得した出力先ディレクトリの存在を確認
-   - 存在しない場合はエラーメッセージを表示し、`/origami:plan-tasks` の再実行を案内
+   - 存在しない場合はエラーメッセージを表示し、`/origami:split-spec` の再実行を案内
 
 ## 入力
 
@@ -55,8 +55,8 @@ description: 指定されたタスクを実行し、対象機能のテストド�
   ```
   エラー: task-list.mdに出力先情報が見つかりません。
 
-  plan-tasksコマンドを再実行してください:
-  /origami:plan-tasks {仕様書パス}
+  split-specコマンドを再実行してください:
+  /origami:split-spec {仕様書パス}
   ```
 
 #### 1.3 依存タスクチェック
@@ -83,14 +83,14 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 - コマンド: `/origami:extract-features --output {出力先} --target F-XXX`
 - 既に該当機能が存在する場合はスキップ
 
-#### 2.2 Phase 1.5: behavior-checklist
+#### 2.2 Phase 1.5: generate-checklist
 - 対象機能のMust/Never動作仕様を `{出力先}/02_動作仕様一覧.md` に追記
-- コマンド: `/origami:behavior-checklist --output {出力先} --target F-XXX`
+- コマンド: `/origami:generate-checklist --output {出力先} --target F-XXX`
 - 信号機システムを適用
 
-#### 2.3 Phase 2: boundary-analysis
+#### 2.3 Phase 2: analyze-boundaries
 - 対象機能の境界値分析表を `{出力先}/03_境界値分析表.md` に追記
-- コマンド: `/origami:boundary-analysis --output {出力先} --target F-XXX`
+- コマンド: `/origami:analyze-boundaries --output {出力先} --target F-XXX`
 - 信号機システムを適用
 
 #### 2.4 Phase 3: generate-cases
@@ -145,11 +145,11 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 ✅ Phase 1 完了: extract-features
    → {出力先}/01_機能一覧.md に追記しました
 
-✅ Phase 1.5 完了: behavior-checklist
+✅ Phase 1.5 完了: generate-checklist
    → {出力先}/02_動作仕様一覧.md に追記しました
    → 🟢: X件 / 🟡: X件 / 🔴: X件
 
-✅ Phase 2 完了: boundary-analysis
+✅ Phase 2 完了: analyze-boundaries
    → {出力先}/03_境界値分析表.md に追記しました
    → 🟢: X件 / 🟡: X件 / 🔴: X件
 
@@ -186,9 +186,9 @@ description: 指定されたタスクを実行し、対象機能のテストド�
 
 | エラーケース | メッセージ |
 |------------|----------|
-| タスクファイル未存在 | 「タスク一覧ファイルが見つかりません。先に `/origami:plan-tasks` を実行してください」 |
-| 出力先情報なし | 「task-list.mdに出力先情報が見つかりません。`/origami:plan-tasks` を再実行してください」 |
-| 出力先ディレクトリ未存在 | 「出力先ディレクトリが存在しません: {パス}。`/origami:plan-tasks` を再実行してください」 |
+| タスクファイル未存在 | 「タスク一覧ファイルが見つかりません。先に `/origami:split-spec` を実行してください」 |
+| 出力先情報なし | 「task-list.mdに出力先情報が見つかりません。`/origami:split-spec` を再実行してください」 |
+| 出力先ディレクトリ未存在 | 「出力先ディレクトリが存在しません: {パス}。`/origami:split-spec` を再実行してください」 |
 | タスクID未指定 | 「タスクIDを指定してください。例: `/origami:run-task TASK-001`」 |
 | 不正なタスクID形式 | 「タスクIDの形式が不正です。TASK-XXX 形式で指定してください」 |
 | タスクが見つからない | 「タスク {タスクID} が見つかりません。有効なタスクID: TASK-001, TASK-002, ...」 |
@@ -225,9 +225,9 @@ task-list.md の概要セクションから出力先を取得する方法:
 
 | コマンド | 説明 |
 |---------|------|
-| `/origami:plan-tasks` | タスク分割計画を生成（run-taskの前に実行、出力先情報を生成） |
+| `/origami:split-spec` | タスク分割計画を生成（run-taskの前に実行、出力先情報を生成） |
 | `/origami:verify-tasks` | 指定ディレクトリのタスク完了状況を確認 |
 | `/origami:extract-features` | 機能一覧を抽出（run-task内で呼び出される） |
-| `/origami:behavior-checklist` | 動作仕様一覧を作成（run-task内で呼び出される） |
-| `/origami:boundary-analysis` | 境界値分析表を作成（run-task内で呼び出される） |
+| `/origami:generate-checklist` | 動作仕様一覧を作成（run-task内で呼び出される） |
+| `/origami:analyze-boundaries` | 境界値分析表を作成（run-task内で呼び出される） |
 | `/origami:generate-cases` | テストケースを生成（run-task内で呼び出される） |
