@@ -23,7 +23,7 @@ Origami Lite は、仕様書からテストドキュメントを自動生成す�
 /plugin marketplace add https://github.com/mozuq-lab/origami-lite
 
 # 2. プラグインをインストール
-/plugin install origami-lite@origami-lite
+/plugin install origami@origami-lite
 ```
 
 ## コマンド一覧
