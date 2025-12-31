@@ -50,6 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking Changes
 
+- **Command Directory Structure Changed**: `commands/origami/` → `commands/`
+  - Command files moved to `commands/` root directory
+  - Fixes double prefix issue (`/origami:origami:` → `/origami:`)
+
 - **Command Naming Convention**: Commands renamed to follow "verb-noun" format
   - `/origami:behavior-checklist` → `/origami:generate-checklist`
   - `/origami:boundary-analysis` → `/origami:analyze-boundaries`
@@ -61,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `behavior-checklist.md` → `generate-checklist.md`
   - `boundary-analysis.md` → `analyze-boundaries.md`
   - `plan-tasks.md` → `split-spec.md`
-- Internal references updated in `run-task.md` and `verify-tasks.md`
+- Command files moved from `commands/origami/` to `commands/`
+- Internal references updated in all command files
 - Documentation updated (CLAUDE.md, README.md)
 
 ## [1.2.0] - 2025-12-31

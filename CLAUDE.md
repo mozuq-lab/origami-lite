@@ -10,7 +10,7 @@ Origami Lite は、AI 駆動ブラックボックステストドキュメント�
 
 ```
 origami-lite/
-├── commands/origami/         # コマンドファイル
+├── commands/                 # コマンドファイル
 │   ├── extract-features.md   # Phase 1: 機能抽出
 │   ├── generate-checklist.md # Phase 1.5: 動作仕様整理
 │   ├── analyze-boundaries.md # Phase 2: 境界値分析
