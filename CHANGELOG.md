@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- Added custom rules documentation to README.md and CLAUDE.md
+  - Rule loading paths: `docs/rule` and `docs/rule/origami`
+  - Usage examples for project-specific rules
+
 ### Planned
 
 - URL fetch support improvements
