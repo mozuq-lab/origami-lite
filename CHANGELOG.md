@@ -19,6 +19,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional test case formats
 - Integration with test management tools
 
+## [3.2.0] - 2026-02-23
+
+### Added
+
+- **New Command: `/origami:review-viewpoints`** (Phase 5)
+  - Reviews generated test cases against a viewpoint catalog for gap analysis
+  - Compares test cases with 203 blackbox test viewpoints from TIS catalog
+  - Signal system adapted for review: 🟢 covered, 🟡 uncovered but recommended, 🔴 needs confirmation
+  - Generates supplementary test case proposals (STC-XXX-YY format) for uncovered viewpoints
+  - Supports both standalone and task-split execution modes
+  - `--app-type` option for filtering viewpoints by application type (web/mobile/api)
+
+- **New Data File: `data/viewpoint-catalog.md`**
+  - 203 blackbox test viewpoints extracted from TIS Test Viewpoint Catalog v1.6
+  - 5 sections: VAL (35), WEB (96), SEC-C (27), SEC-W (25), USA (20)
+  - Licensed under CC BY-SA 4.0 (Creative Commons Attribution-ShareAlike 4.0 International)
+
+- **Phase 5 Support in `run-task`**
+  - `--phase 5` executes review-viewpoints for the target feature
+  - Phase range extended from 1-4 to 1-5
+  - Phase 5 prerequisite check: `04_テストケース.md` + `01_機能詳細.md` must exist
+  - Phase 5 is optional: omitting `--phase` still executes Phase 1-4 only (backward compatible)
+
+### Changed
+
+- **`verify-tasks`**: Phase 5 column added to progress table (shown as `—` when not executed)
+- **`split-spec`**: Task template includes Phase 5 row marked as `(任意)`
+- **`run-task`**: Phase mapping table, prerequisite table, and context separation table updated for Phase 5
+
+### Backward Compatibility
+
+- `--phase` omission behavior unchanged (Phase 1-4 only)
+- Progress calculation remains 4-phase based (Phase 5 is optional indicator)
+- Existing Phase 1-4 workflows are unaffected
+
 ## [3.1.0] - 2025-12-31
 
 ### Added
