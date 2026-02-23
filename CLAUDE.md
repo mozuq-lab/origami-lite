@@ -10,15 +10,18 @@ Origami Lite は、AI 駆動ブラックボックステストドキュメント�
 
 ```
 origami-lite/
-├── commands/                 # コマンドファイル
-│   ├── extract-features.md   # Phase 1: 機能抽出
-│   ├── generate-checklist.md # Phase 1.5: 動作仕様整理
-│   ├── analyze-boundaries.md # Phase 2: 境界値分析
-│   ├── generate-cases.md     # Phase 3: テストケース生成
-│   ├── split-spec.md         # タスク分割: 計画生成
-│   ├── run-task.md           # タスク分割: タスク実行
-│   └── verify-tasks.md       # タスク分割: 進捗確認
-├── .claude-plugin/           # プラグイン設定
+├── commands/                    # コマンドファイル
+│   ├── extract-features.md      # Phase 1: 機能抽出
+│   ├── generate-checklist.md    # Phase 1.5: 動作仕様整理
+│   ├── analyze-boundaries.md    # Phase 2: 境界値分析
+│   ├── generate-cases.md        # Phase 3: テストケース生成
+│   ├── review-viewpoints.md     # Phase 5: テスト観点レビュー（オプション）
+│   ├── split-spec.md            # タスク分割: 計画生成
+│   ├── run-task.md              # タスク分割: タスク実行
+│   └── verify-tasks.md          # タスク分割: 進捗確認
+├── data/                        # データファイル
+│   └── viewpoint-catalog.md     # テスト観点カタログ（TIS v1.6, CC BY-SA 4.0）
+├── .claude-plugin/              # プラグイン設定
 │   ├── plugin.json
 │   └── marketplace.json
 ├── README.md
@@ -36,6 +39,7 @@ origami-lite/
 | `/origami:generate-checklist` | Phase 1.5 | 機能一覧       | 02\_動作仕様一覧.md     |
 | `/origami:analyze-boundaries` | Phase 2   | 動作仕様一覧   | 03\_境界値分析表.md     |
 | `/origami:generate-cases`     | Phase 3   | 全ドキュメント | 04\_テストケース一覧.md |
+| `/origami:review-viewpoints`  | Phase 5   | テストケース + カタログ | 05\_観点レビュー一覧.md |
 
 ### タスク分割コマンド
 
@@ -45,10 +49,10 @@ origami-lite/
 | コマンド                | 入力              | 出力                                    |
 | ----------------------- | ----------------- | --------------------------------------- |
 | `/origami:split-spec`   | 仕様書            | {仕様書名}/tasks/task-list.md           |
-| `/origami:run-task`     | タスクID [--phase N] | {仕様書名}/F-XXX_{機能名}/ に4ファイル  |
+| `/origami:run-task`     | タスクID [--phase N] | {仕様書名}/F-XXX_{機能名}/ に4-5ファイル |
 | `/origami:verify-tasks` | 仕様書名          | フェーズ単位進捗レポート                |
 
-### フェーズ間入力制限（v3.1.0）
+### フェーズ間入力制限（v3.2.0）
 
 各フェーズは前フェーズの出力のみを参照し、コンテキストサイズを一定に保つ：
 
@@ -58,6 +62,7 @@ origami-lite/
 | Phase 2 | generate-checklist | `01_機能詳細.md` のみ | `02_動作仕様.md` |
 | Phase 3 | analyze-boundaries | `02_動作仕様.md` のみ | `03_境界値分析.md` |
 | Phase 4 | generate-cases | `01` + `02` + `03` | `04_テストケース.md` |
+| Phase 5 (任意) | review-viewpoints | `04` + `01` + catalog | `05_観点レビュー.md` |
 
 ## 信号機システム
 
@@ -97,7 +102,8 @@ docs/origami/{仕様書名}/
 ├── 01_機能一覧.md
 ├── 02_動作仕様一覧.md
 ├── 03_境界値分析表.md
-└── 04_テストケース一覧.md
+├── 04_テストケース一覧.md
+└── 05_観点レビュー一覧.md   # オプション（Phase 5）
 ```
 
 ### タスク分割経由時（機能別ディレクトリ）
@@ -110,7 +116,8 @@ docs/origami/{仕様書名}/
 │   ├── 01_機能詳細.md
 │   ├── 02_動作仕様.md
 │   ├── 03_境界値分析.md
-│   └── 04_テストケース.md
+│   ├── 04_テストケース.md
+│   └── 05_観点レビュー.md   # オプション（Phase 5）
 ├── F-002_{機能名2}/
 │   └── ...
 ```
@@ -147,14 +154,15 @@ docs/origami/{仕様書名}/
     ↓ フェーズ単位進捗レポート表示
 ```
 
-### フェーズ単位実行（v3.1.0〜）
+### フェーズ単位実行（v3.2.0〜）
 
 ```
 /origami:run-task TASK-001 --phase 1  # Phase 1 のみ
 /origami:run-task TASK-001 --phase 2  # Phase 2 のみ
 /origami:run-task TASK-001 --phase 3  # Phase 3 のみ
 /origami:run-task TASK-001 --phase 4  # Phase 4 のみ
-/origami:run-task TASK-001            # 全フェーズ（後方互換）
+/origami:run-task TASK-001 --phase 5  # Phase 5（観点レビュー、オプション）
+/origami:run-task TASK-001            # Phase 1-4（後方互換）
 ```
 
 ### 単独実行
@@ -191,7 +199,7 @@ description: コマンドの簡潔な説明
 
 1. **信号機システムの一貫性**: 全コマンドで同じ判断基準を維持
 2. **出力形式の統一**: Markdown 形式、Mermaid 図表記法を使用
-3. **ID 体系の維持**: F-XXX（機能）、TC-XXX-YY（テストケース）形式
+3. **ID 体系の維持**: F-XXX（機能）、TC-XXX-YY（テストケース）、STC-XXX-YY（補完テストケース案）、VP-{SEC}-{NNN}（観点）形式
 
 ## 謝辞
 
